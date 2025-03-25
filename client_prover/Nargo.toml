@@ -1,0 +1,8 @@
+[package]
+name = "client_prover"
+type = "lib"
+authors = [""]
+
+[dependencies]
+noir_mpc_ml = { git = "https://github.com/hashcloak/noir-mpc-ml", tag = "v0.1.2" }
+ecdh = { git = "https://github.com/privacy-scaling-explorations/zk-kit.noir", tag = "main", directory = "packages/ecdh" }

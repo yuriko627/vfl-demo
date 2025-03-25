@@ -1,0 +1,6 @@
+[package]
+name = "client2"
+type = "bin"
+authors = [""]
+
+[dependencies]
