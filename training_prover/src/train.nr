@@ -42,6 +42,10 @@ pub fn train<let N: u32, let M: u32, let C: u32>(
     println(trained_model);
 
     let ecdh = BJJ::new(secret_key);
-    let public_key = ecdh.derive_public_key();
-    println(public_key);
+    let pk = ecdh.derive_public_key();
+
+    println("pk_x:");
+    println(pk.x);
+    println("pk_y:");
+    println(pk.y);
 }
