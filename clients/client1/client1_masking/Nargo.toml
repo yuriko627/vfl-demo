@@ -1,0 +1,8 @@
+[package]
+name = "client1_masking"
+type = "bin"
+authors = [""]
+
+[dependencies]
+masking_prover = { path = "../../../masking_prover" }
+training_prover = { path = "../../../training_prover" }

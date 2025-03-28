@@ -1,8 +1,8 @@
 [package]
-name = "client1"
+name = "client3_training"
 type = "bin"
 authors = [""]
 
 [dependencies]
 noir_mpc_ml = { git = "https://github.com/hashcloak/noir-mpc-ml", tag = "v0.1.2" }
-client_prover = { path = "../../client_prover" }
+training_prover = { path = "../../../training_prover" }
