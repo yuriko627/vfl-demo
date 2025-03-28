@@ -1,2 +1,2 @@
 # Ignore Nargo build outputs
-clients/*/target/
+clients/*/*/target
