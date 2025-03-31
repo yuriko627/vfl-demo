@@ -5,43 +5,62 @@ interface IVerifier {
     function verify(bytes calldata _proof, bytes32[] calldata _publicInputs) external view returns (bool);
 }
 
-
 contract PublicKeyRegistry {
     struct PublicKey {
         bytes32 pk_x;
         bytes32 pk_y;
     }
 
-    mapping(address => PublicKey) public publicKeys;
-    address[] public registeredUsers;
-
     IVerifier public verifier;
 
-    constructor(address _verifier) {
-        verifier = IVerifier(_verifier);
-    }
+    // Mapping from client address to their PublicKey
+    mapping(address => PublicKey) public publicKeys;
 
-    function registerWithProof(
+    // Ordered list of registered clients
+    address[] public registeredClients;
+
+    function registerPublicKey(
+        bytes calldata proof,
+        address verifierAddress,
         bytes32 pk_x,
         bytes32 pk_y,
-        bytes calldata proof,
         bytes32[] calldata publicInputs
     ) external {
-        require(publicKeys[msg.sender].pk_x == bytes32(0) && publicKeys[msg.sender].pk_y == bytes32(0), "Already registered");
+        require(publicKeys[msg.sender].pk_x == bytes32(0) && publicKeys[msg.sender].pk_y == bytes32(0), "This public key is already registered");
+        require(verifierAddress != address(0), "Invalid verifier address");
 
-        bool isValid = verifier.verify(proof, publicInputs);
+        bool isValid = IVerifier(verifierAddress).verify(proof, publicInputs);
         require(isValid, "Invalid ZK proof");
 
         publicKeys[msg.sender] = PublicKey(pk_x, pk_y);
-        registeredUsers.push(msg.sender);
+        registeredClients.push(msg.sender);
     }
 
-    function getAllPublicKeys() external view returns (address[] memory, PublicKey[] memory) {
-        uint len = registeredUsers.length;
-        PublicKey[] memory keys = new PublicKey[](len);
-        for (uint i = 0; i < len; i++) {
-            keys[i] = publicKeys[registeredUsers[i]];
+    function getNeighborPublicKeys() external view returns (PublicKey memory lowerNeighborPublicKey, PublicKey memory higherNeighborPublicKey) {
+        uint256 total = registeredClients.length;
+        require(total >= 2, "Not enough users to determine neighbors");
+
+        uint256 myId = total;
+        for (uint256 i = 0; i < total; i++) {
+            if (registeredClients[i] == msg.sender) {
+                myId = uint256(i);
+                break;
+            }
         }
-        return (registeredUsers, keys);
+
+        require(myId != total, "Sender not registered");
+
+        // Index of circular neighbors
+        // e.g. For 0, lower: 2 &  higher 1
+        // e.g. For 1, lower: 0 &  higher 2
+        // e.g. For 2, lower: 1 &  higher 0
+        uint256 lowerId = (myId == 0) ? (total - 1) : (myId - 1);
+        uint256 higherId = (myId + 1) % total;
+
+        lowerNeighborPublicKey = publicKeys[registeredClients[lowerId]];
+        higherNeighborPublicKey = publicKeys[registeredClients[higherId]];
+
+        return (lowerNeighborPublicKey, higherNeighborPublicKey);
     }
+
 }

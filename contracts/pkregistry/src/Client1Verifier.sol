@@ -1,12 +1,11 @@
-// Verifier contract for client1
-// Verification Key Hash: 4f886e314540675d654aafd325d93212e0876406057cf782d1b292284c3e195b
+// Verification Key Hash: c650a4af45db9c38e688bf4656a837ec0f286da52caa1d23b312c6330584a405
 // SPDX-License-Identifier: Apache-2.0
 // Copyright 2022 Aztec
 pragma solidity >=0.8.4;
 
-library UltraVerificationKey {
+library Client1VerificationKey {
     function verificationKeyHash() internal pure returns(bytes32) {
-        return 0x4f886e314540675d654aafd325d93212e0876406057cf782d1b292284c3e195b;
+        return 0xc650a4af45db9c38e688bf4656a837ec0f286da52caa1d23b312c6330584a405;
     }
 
     function loadVerificationKey(uint256 _vk, uint256 _omegaInverseLoc) internal pure {
@@ -76,7 +75,7 @@ library UltraVerificationKey {
  * @title Ultra Plonk proof verification contract
  * @dev Top level Plonk proof verification contract, which allows Plonk proof to be verified
  */
-abstract contract BaseUltraVerifier {
+abstract contract BaseClient1Verifier {
     // VERIFICATION KEY MEMORY LOCATIONS
     uint256 internal constant N_LOC = 0x380;
     uint256 internal constant NUM_INPUTS_LOC = 0x3a0;
@@ -2767,12 +2766,12 @@ abstract contract BaseUltraVerifier {
     }
 }
 
-contract UltraVerifier is BaseUltraVerifier {
-    function getVerificationKeyHash() public pure override(BaseUltraVerifier) returns (bytes32) {
-        return UltraVerificationKey.verificationKeyHash();
+contract Client1Verifier is BaseClient1Verifier {
+    function getVerificationKeyHash() public pure override(BaseClient1Verifier) returns (bytes32) {
+        return Client1VerificationKey.verificationKeyHash();
     }
 
-    function loadVerificationKey(uint256 vk, uint256 _omegaInverseLoc) internal pure virtual override(BaseUltraVerifier) {
-        UltraVerificationKey.loadVerificationKey(vk, _omegaInverseLoc);
+    function loadVerificationKey(uint256 vk, uint256 _omegaInverseLoc) internal pure virtual override(BaseClient1Verifier) {
+        Client1VerificationKey.loadVerificationKey(vk, _omegaInverseLoc);
     }
 }
