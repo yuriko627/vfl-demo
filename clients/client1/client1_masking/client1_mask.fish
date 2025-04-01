@@ -38,5 +38,5 @@ fish ../../../parse_fetched_pk.fish \
 
 nargo execute
 bb prove -b ./target/client1_masking.json -w ./target/client1_masking.gz -o ./target/proof
-bb write_vk -b ./target/masking_training.json -o ./target/vk
+bb write_vk -b ./target/client1_masking.json -o ./target/vk
 bb contract
