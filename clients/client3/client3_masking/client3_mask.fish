@@ -1,9 +1,9 @@
 #!/usr/bin/env fish
 
-echo "Start masking a model on client3"
+echo "😶‍🌫️ Start masking a model on Client3"
 
-# Send transaction to erifing the proof for a correct training,
-# and if this verification passees, register ECDH public key
+# Send transaction to verify the proof of correct training,
+# and if this verification passes, register ECDH public key on chain
 echo "Verify proof and register ECDH public key on chain"
 cast send 0x8A791620dd6260079BF849Dc5567aDC3F2FdC318 \
   "registerPublicKey(bytes,address,bytes32,bytes32,bytes32[])" \
@@ -16,8 +16,25 @@ cast send 0x8A791620dd6260079BF849Dc5567aDC3F2FdC318 \
   --private-key 0x4bbbf85ce3377467afe5d46f804f221813b2bb87f24d81f60f1fcdbf7cbf4356
 
 # Fectch 2 neigbor clients' public keys
-echo "Fectch 2 neigbor clients' public keys (higher node: Client1, lower node: clinet2)"
-cast call 0x8A791620dd6260079BF849Dc5567aDC3F2FdC318 \
+echo "🔑 Fectch 2 neigbor clients' public keys (lower node: Client2, higher node: Client1)"
+set fetched_output (cast call 0x8A791620dd6260079BF849Dc5567aDC3F2FdC318 \
   "getNeighborPublicKeys()" \
   --rpc-url http://localhost:8545 \
-  --from 0x14dC79964da2C08b23698B3D3cc7Ca32193d9955
+  --from 0x14dC79964da2C08b23698B3D3cc7Ca32193d9955 2>&1)
+
+# Extract the last 256 characters
+set pk (string sub -s (math (string length $fetched_output) - 255) $fetched_output)
+
+echo "✅ Fetched raw public key hex:"
+echo $pk
+
+# Parse $pk and write to Prover.toml
+echo "🛠️ Parse public keys and save them in Prover.toml..."
+fish ../../../parse_fetched_pk.fish \
+  $pk \
+  ./Prover.toml
+
+nargo execute
+bb prove -b ./target/client3_masking.json -w ./target/client3_masking.gz -o ./target/proof
+bb write_vk -b ./target/masking_training.json -o ./target/vk
+bb contract

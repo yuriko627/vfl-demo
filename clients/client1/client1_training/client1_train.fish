@@ -1,9 +1,18 @@
 #!/usr/bin/env fish
 
-echo "Start training a model on client1"
+echo "Start training a model on Client1"
 
-# Train a model and generate a proof
-nargo execute
+# Train a model and generate a proof for it
+set training_output (nargo execute 2>&1 | string match -r 'MultiClassTrainedModel.*')
+
+set priv_key 1
+
+# Parse the output model and write to Prover.toml in ./client1_masking directory
+fish ../../../parse_trained_model.fish \
+  "$training_output" \
+  ../client1_masking/Prover.toml \
+  "$priv_key"
+
 bb prove -b ./target/client1_training.json -w ./target/client1_training.gz -o ./target/proof
 bb write_vk -b ./target/client1_training.json -o ./target/vk
 bb contract
