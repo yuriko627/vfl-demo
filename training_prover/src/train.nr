@@ -14,7 +14,7 @@ pub struct MultiClassTrainedModel<let M: u32, let C: u32> {
     pub models: [TrainedModelPerClass<M>; C],
     pub n_samples: Field,
 }
-// N: Number of samples (e.g. client1:10, client2:10, client3:20)
+// N: Number of samples (e.g. Client1: 10, Client2: 10, Client3: 20)
 // M: Number of features per sample (e.g. 4)
 // C: Numebr of classes (e.g. 3)
 pub fn train<let N: u32, let M: u32, let C: u32>(
