@@ -3,7 +3,12 @@
 echo "Start training a model on Client2"
 
 # Train a model and generate a proof for it
-set training_output (nargo execute 2>&1 | string match -r 'MultiClassTrainedModel.*')
+set training_output (nargo execute 2>&1)
+
+# We'll use this variable later for maksing (when executing client1_mask.fish)
+echo "Training ZKcircuit executed: Training done"
+echo $training_output | grep -oE 'pk_x: 0x[0-9a-fA-F]+' | grep -oE '0x[0-9a-fA-F]+' > /tmp/pk2_x
+echo $training_output | grep -oE 'pk_y: 0x[0-9a-fA-F]+' | grep -oE '0x[0-9a-fA-F]+' > /tmp/pk2_y
 
 set priv_key 2
 
@@ -13,8 +18,6 @@ fish ../../../parse_trained_model.fish \
   ../client2_masking/Prover.toml \
   "$priv_key"
 
-# Train a model and generate a proof
-nargo execute
 bb prove -b ./target/client2_training.json -w ./target/client2_training.gz -o ./target/proof
 bb write_vk -b ./target/client2_training.json -o ./target/vk
 bb contract

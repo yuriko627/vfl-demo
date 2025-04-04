@@ -3,7 +3,13 @@
 echo "Start training a model on Client1"
 
 # Train a model and generate a proof for it
-set training_output (nargo execute 2>&1 | string match -r 'MultiClassTrainedModel.*')
+# set training_output (nargo execute 2>&1 | string match -r 'MultiClassTrainedModel.*')
+set training_output (nargo execute 2>&1)
+
+# We'll use this variable later for maksing (when executing client1_mask.fish)
+echo "Training ZKcircuit executed: Training done"
+echo $training_output | grep -oE 'pk_x: 0x[0-9a-fA-F]+' | grep -oE '0x[0-9a-fA-F]+' > /tmp/pk1_x
+echo $training_output | grep -oE 'pk_y: 0x[0-9a-fA-F]+' | grep -oE '0x[0-9a-fA-F]+' > /tmp/pk1_y
 
 set priv_key 1
 

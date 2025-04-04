@@ -3,7 +3,12 @@
 echo "Start training a model on Client3"
 
 # Train a model and generate a proof for it
-set training_output (nargo execute 2>&1 | string match -r 'MultiClassTrainedModel.*')
+set training_output (nargo execute 2>&1)
+
+# We'll use this variable later for maksing (when executing client1_mask.fish)
+echo "Training ZKcircuit executed: Training done"
+echo $training_output | grep -oE 'pk_x: 0x[0-9a-fA-F]+' | grep -oE '0x[0-9a-fA-F]+' > /tmp/pk3_x
+echo $training_output | grep -oE 'pk_y: 0x[0-9a-fA-F]+' | grep -oE '0x[0-9a-fA-F]+' > /tmp/pk3_y
 
 set priv_key 3
 
@@ -13,8 +18,6 @@ fish ../../../parse_trained_model.fish \
   ../client3_masking/Prover.toml \
   "$priv_key"
 
-# Train a model and generate a proof
-nargo execute
 bb prove -b ./target/client3_training.json -w ./target/client3_training.gz -o ./target/proof
 bb write_vk -b ./target/client3_training.json -o ./target/vk
 bb contract
@@ -30,9 +33,3 @@ cat $src_path | \
     > $dest_path
 
 echo "Client 3: training done, verifier contract is ready to deploy"
-
-echo " Deploy 3 verifier contracts and PublickeyRegistry contract"
-
-cd ../../../contracts/pkregistry/
-
-forge script script/DeployPublicKeyRegistry.s.sol --rpc-url http://localhost:8545 --broadcast --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
