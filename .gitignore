@@ -1,2 +1,3 @@
 # Ignore Nargo build outputs
 clients/*/*/target
+clients/*/*/Prover.toml
