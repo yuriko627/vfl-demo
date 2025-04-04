@@ -1,10 +1,8 @@
 # vfl-demo
 verifiable federated leaning demo
 
-run `anvil` first
-
-Client:
-1. Train: run `fish train.fish` -> Verifies proof and register ECDH public keys on chain
-2. Mask the model: run `fish mask.fish` -> Verifies proof and register masked models on chain
+you need to install a terminal multiplexer `tmux` to run this CLI demo, which simulates 3 clients, server, and have anvil log in one window
+run `bash start.sh` to start
+run `tmux kill-session` to end (everytime before running it again)
 
 Server: WIP
