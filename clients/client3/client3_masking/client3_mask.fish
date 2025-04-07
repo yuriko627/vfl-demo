@@ -51,3 +51,15 @@ nargo execute
 bb prove -b ./target/client3_masking.json -w ./target/client3_masking.gz -o ./target/proof
 bb write_vk -b ./target/client3_masking.json -o ./target/vk
 bb contract
+
+# Rename and copy verifier contract
+set src_path ./target/contract.sol
+set dest_path ../../../contracts/model_registry/src/Client3Verifier.sol
+
+cat $src_path | \
+    string replace -a --regex 'UltraVerifier\b' 'Client3Verifier' | \
+    string replace -a --regex 'BaseUltraVerifier\b' 'Client3BaseVerifier' | \
+    string replace -a --regex 'UltraVerificationKey\b' 'Client3VerificationKey' \
+    > $dest_path
+
+echo "Client 3: masking done, verifier contract is ready to deploy"
