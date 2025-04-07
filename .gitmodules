@@ -1,5 +1,5 @@
-[submodule "contracts/pkregistry/lib/forge-std"]
-	path = contracts/pkregistry/lib/forge-std
+[submodule "contracts/pk_registry/lib/forge-std"]
+	path = contracts/pk_registry/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
 [submodule "contracts/model_registry/lib/forge-std"]
 	path = contracts/model_registry/lib/forge-std

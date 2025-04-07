@@ -25,7 +25,7 @@ contract DeployScript is Script {
         console.log("Client2Verifier deployed at:", address(verifier2));
         console.log("Client3Verifier deployed at:", address(verifier3));
 
-        // Deploy PublicKeyRegistry (no verifier needed at deployment)
+        // Deploy PublicKeyRegistry contract
         publicKeyRegistry = new PublicKeyRegistry();
         console.log("PublicKeyRegistry deployed at:", address(publicKeyRegistry));
 

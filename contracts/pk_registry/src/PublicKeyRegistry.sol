@@ -26,11 +26,12 @@ contract PublicKeyRegistry {
         bytes32 pk_y,
         bytes32[] calldata publicInputs
     ) external {
+        // if an address hasn’t been set in the mapping before, it returns the default value.
         require(publicKeys[msg.sender].pk_x == bytes32(0) && publicKeys[msg.sender].pk_y == bytes32(0), "This public key is already registered");
         require(verifierAddress != address(0), "Invalid verifier address");
 
         bool isValid = IVerifier(verifierAddress).verify(proof, publicInputs);
-        require(isValid, "Invalid ZK proof");
+        require(isValid, "Invalid ZK proof for training");
 
         publicKeys[msg.sender] = PublicKey(pk_x, pk_y);
         registeredClients.push(msg.sender);
