@@ -24,7 +24,7 @@ bb contract
 
 # Rename and copy verifier contract
 set src_path ./target/contract.sol
-set dest_path ../../../contracts/pkregistry/src/Client2Verifier.sol
+set dest_path ../../../contracts/pk_registry/src/Client2Verifier.sol
 
 cat $src_path | \
     string replace -a --regex 'UltraVerifier\b' 'Client2Verifier' | \

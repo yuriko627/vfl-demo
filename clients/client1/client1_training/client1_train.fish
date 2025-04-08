@@ -3,7 +3,6 @@
 echo "Start training a model on Client1"
 
 # Train a model and generate a proof for it
-# set training_output (nargo execute 2>&1 | string match -r 'MultiClassTrainedModel.*')
 set training_output (nargo execute 2>&1)
 
 # We'll use this variable later for maksing (when executing client1_mask.fish)
@@ -25,7 +24,7 @@ bb contract
 
 # Rename and copy verifier contract
 set src_path ./target/contract.sol
-set dest_path ../../../contracts/pkregistry/src/Client1Verifier.sol
+set dest_path ../../../contracts/pk_registry/src/Client1Verifier.sol
 
 cat $src_path | \
     string replace -a --regex 'UltraVerifier\b' 'Client1Verifier' | \
