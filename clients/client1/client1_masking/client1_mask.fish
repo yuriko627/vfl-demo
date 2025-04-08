@@ -1,7 +1,7 @@
 #!/usr/bin/env fish
 
 set PKREGISTRY_ADDRESS $(cat /tmp/pkregistry_address)
-set CL1VERIFIER_ADDRESS $(cat /tmp/client1verifier_address)
+set CL1TRAINVERIFIER_ADDRESS $(cat /tmp/client1trainverifier_address)
 set PROOF $(od -An -v -t x1 ../client1_training/target/proof | tr -d ' \n')
 set PK1_X $(cat /tmp/pk1_x)
 set PK1_Y $(cat /tmp/pk1_y)
@@ -15,7 +15,7 @@ echo "Verify training proof and register ECDH public key on chain"
 cast send $PKREGISTRY_ADDRESS \
   "registerPublicKey(bytes,address,bytes32,bytes32,bytes32[])" \
   0x$PROOF \
-  $CL1VERIFIER_ADDRESS \
+  $CL1TRAINVERIFIER_ADDRESS \
   $PK1_X \
   $PK1_Y \
   [] \
@@ -29,7 +29,6 @@ sleep 2
 # Fectch 2 neigbor clients' public keys
 echo "🔑 Fectch 2 neigbor clients' public keys (lower node: Client3, higher node: Client2)"
 
-# Run the cast call and capture the raw output
 set fetched_output (cast call $PKREGISTRY_ADDRESS \
   "getNeighborPublicKeys()" \
   --rpc-url http://localhost:8545 \
@@ -49,7 +48,13 @@ fish ../../../parse_fetched_pk.fish \
   $pk \
   ./Prover.toml
 
-nargo execute
+set masking_output (nargo execute 2>&1)
+echo $masking_output
+echo "Masking ZKcircuit executed: Masking done"
+
+# Parse the output masked model and pass it to publish_model.fish to publish it onchain
+fish ../../../parse_masked_model.fish "$masking_output" > /tmp/model1
+
 bb prove -b ./target/client1_masking.json -w ./target/client1_masking.gz -o ./target/proof
 bb write_vk -b ./target/client1_masking.json -o ./target/vk
 bb contract

@@ -1,7 +1,7 @@
 #!/usr/bin/env fish
 
 set PKREGISTRY_ADDRESS $(cat /tmp/pkregistry_address)
-set CL2VERIFIER_ADDRESS $(cat /tmp/client2verifier_address)
+set CL2TRAINVERIFIER_ADDRESS $(cat /tmp/client2trainverifier_address)
 set PROOF $(od -An -v -t x1 ../client2_training/target/proof | tr -d ' \n')
 set PK2_X $(cat /tmp/pk2_x)
 set PK2_Y $(cat /tmp/pk2_y)
@@ -15,7 +15,7 @@ echo "Verify training proof and register ECDH public key on chain"
 cast send $PKREGISTRY_ADDRESS \
   "registerPublicKey(bytes,address,bytes32,bytes32,bytes32[])" \
   0x$PROOF \
-  $CL2VERIFIER_ADDRESS \
+  $CL2TRAINVERIFIER_ADDRESS \
   $PK2_X \
   $PK2_Y \
   [] \
@@ -25,8 +25,10 @@ cast send $PKREGISTRY_ADDRESS \
 # Just for the sake of demo, wait for the other two clients to register their public key
 # We have to think this asynchronous coordination issue later
 sleep 2
+
 # Fectch 2 neigbor clients' public keys
 echo "🔑 Fectch 2 neigbor clients' public keys (lower node: Client1, higher node: Client3)"
+
 set fetched_output (cast call $PKREGISTRY_ADDRESS \
   "getNeighborPublicKeys()" \
   --rpc-url http://localhost:8545 \
@@ -46,7 +48,13 @@ fish ../../../parse_fetched_pk.fish \
   $pk \
   ./Prover.toml
 
-nargo execute
+set masking_output (nargo execute 2>&1)
+echo $masking_output
+echo "Masking ZKcircuit executed: Masking done"
+
+# Parse the output masked model and pass it to publish_model.fish to publish it onchain
+fish ../../../parse_masked_model.fish "$masking_output" > /tmp/model2
+
 bb prove -b ./target/client2_masking.json -w ./target/client2_masking.gz -o ./target/proof
 bb write_vk -b ./target/client2_masking.json -o ./target/vk
 bb contract

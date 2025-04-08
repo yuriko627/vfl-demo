@@ -3,7 +3,7 @@
 SESSION="vfl_cli_demo"
 
 # Clean up any previous marker files
-rm -f /tmp/.train_done0 /tmp/.train_done1 /tmp/.train_done2 /tmp/.deploy_done
+rm -f /tmp/.train_done0 /tmp/.train_done1 /tmp/.train_done2 /tmp/.deploy_pk_done /tmp/.mask_done0 /tmp/.mask_done1 /tmp/.mask_done2 /tmp/.deploy_model_done /tmp/.publish_model_done0 /tmp/.publish_model_done1 /tmp/.publish_model_done2
 
 tmux new-session -d -s $SESSION -c ./clients/client1
 
@@ -39,49 +39,90 @@ while [ ! -f /tmp/.train_done0 ] || [ ! -f /tmp/.train_done1 ] || [ ! -f /tmp/.t
   echo Waiting...
   sleep 1
 done
-fish server.fish | tee /tmp/server_output.log; touch /tmp/.deploy_done
-
-# Extract contract address
-grep 'Client1Verifier' /tmp/server_output.log | grep -oE '0x[a-fA-F0-9]{40}' > /tmp/client1verifier_address
-grep 'Client2Verifier' /tmp/server_output.log | grep -oE '0x[a-fA-F0-9]{40}' > /tmp/client2verifier_address
-grep 'Client3Verifier' /tmp/server_output.log | grep -oE '0x[a-fA-F0-9]{40}' > /tmp/client3verifier_address
-grep 'PublicKeyRegistry' /tmp/server_output.log | grep -oE '0x[a-fA-F0-9]{40}' > /tmp/pkregistry_address
+fish ../deploy_pk_registry.fish | tee /tmp/deploy_pk_output.log; touch /tmp/.deploy_pk_done
 "' C-m
 
 # In pane 4, start anvil nodes
 tmux send-keys -t 4 'clear; anvil' C-m
 
-
-# Once Pane 3 is done, restart client0-2 for sending a transaction for public key register
+# Once pk_registry contract deployment is done, restart client0-2, sending a transaction to register public key
 # contract address captured in pane 3
 tmux send-keys -t 0 'bash -c "
-while [ ! -f /tmp/.deploy_done ]; do
-  echo [client1] Waiting for /tmp/.deploy_done...
+while [ ! -f /tmp/.deploy_pk_done ]; do
+  echo [client1] Waiting for the model_registry contract to be deployed...
   sleep 1
 done
 echo Contract deployed
 cd ../client1_masking
 fish client1_mask.fish
+touch /tmp/.mask_done0
 "' C-m
 
 tmux send-keys -t 1 'bash -c "
-while [ ! -f /tmp/.deploy_done ]; do
-  echo [client2] Waiting for /tmp/.deploy_done...
+while [ ! -f /tmp/.deploy_pk_done ]; do
+  echo [client2] Waiting for the model_registry contract to be deployed...
   sleep 1
 done
 echo Contract deployed
 cd ../client2_masking
 fish client2_mask.fish
+touch /tmp/.mask_done1
 "' C-m
 
 tmux send-keys -t 2 'bash -c "
-while [ ! -f /tmp/.deploy_done ]; do
-  echo [client3] Waiting for /tmp/.deploy_done...
+while [ ! -f /tmp/.deploy_pk_done ]; do
+  echo [client3] Waiting for the model_registry contract to be deployed...
   sleep 1
 done
 echo Contract deployed
 cd ../client3_masking
 fish client3_mask.fish
+touch /tmp/.mask_done2
+"' C-m
+
+# In pane 3 (server), wait for all clients to complete masking the model, then deploy contract
+tmux send-keys -t 3 'clear; bash -c "
+echo Waiting for the clients to complete masking the model
+while [ ! -f /tmp/.mask_done0 ] || [ ! -f /tmp/.mask_done1 ] || [ ! -f /tmp/.mask_done2 ]; do
+  echo Waiting...
+  sleep 1
+done
+fish ../deploy_model_registry.fish | tee /tmp/deploy_model_output.log; touch /tmp/.deploy_model_done
+"' C-m
+
+# Once model_registry contract deployment is done, restart client0-2, sending a transaction to register the masked model
+# contract address captured in pane 3
+tmux send-keys -t 0 'bash -c "
+while [ ! -f /tmp/.deploy_model_done ]; do
+  echo [client1] Waiting for the model_registry contract to be deployed...
+  sleep 1
+done
+echo Contract deployed
+cd ../client1_masking
+fish publish_model1.fish
+touch /tmp/.publish_model_done0
+"' C-m
+
+tmux send-keys -t 1 'bash -c "
+while [ ! -f /tmp/.deploy_model_done ]; do
+  echo [client2] Waiting for the model_registry contract to be deployed...
+  sleep 1
+done
+echo Contract deployed
+cd ../client2_masking
+fish publish_model2.fish
+touch /tmp/.publish_model_done1
+"' C-m
+
+tmux send-keys -t 2 'bash -c "
+while [ ! -f /tmp/.deploy_model_done ]; do
+  echo [client3] Waiting for the model_registry contract to be deployed...
+  sleep 1
+done
+echo Contract deployed
+cd ../client3_masking
+fish publish_model3.fish
+touch /tmp/.publish_model_done2
 "' C-m
 
 # Attach to session
