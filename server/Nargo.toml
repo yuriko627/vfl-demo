@@ -1,0 +1,8 @@
+[package]
+name = "aggregation"
+type = "bin"
+authors = [""]
+
+[dependencies]
+training_prover = { path = "../training_prover" }
+aggregation_prover = { path = "../aggregation_prover" }

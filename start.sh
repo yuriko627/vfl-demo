@@ -125,5 +125,15 @@ fish publish_model3.fish
 touch /tmp/.publish_model_done2
 "' C-m
 
+# In pane 3 (server), wait for all clients to publish the masked models, then fetch them
+tmux send-keys -t 3 'clear; bash -c "
+echo Waiting for the clients to complete masking the model
+while [ ! -f /tmp/.publish_model_done0 ] || [ ! -f /tmp/.publish_model_done1 ] || [ ! -f /tmp/.publish_model_done2 ]; do
+  echo Waiting...
+  sleep 1
+done
+fish ./aggregate.fish
+"' C-m
+
 # Attach to session
 tmux attach -t $SESSION

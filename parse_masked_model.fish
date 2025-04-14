@@ -1,7 +1,7 @@
 #!/usr/bin/env fish
 
 if test (count $argv) -ne 1
-    echo "Usage: ./parse_model.fish '<your model string>'"
+    echo "Usage: ./parse_masked_model.fish '<your model string>'"
     return 1
 end
 

@@ -74,7 +74,7 @@ pub fn mask<let M: u32, let C: u32>(
         let mut masked_weights: [Quantized; M] = [Quantized::zero(); M];
 
         for i in 0..M {
-            // Restrict the mask to be less than 125 bits, so the addition won't overflow
+            // Restrict the mask to be less than 125 bits, so the addition and subtraction won't overflow
             assert_bitsize::<125>(mask_with_higher_node[i]);
             assert_bitsize::<125>(mask_with_lower_node[i]);
             masked_weights[i] = my_model.models[class_idx].weights[i]
