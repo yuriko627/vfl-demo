@@ -26,4 +26,4 @@ cast send $MODELREGISTRY_ADDRESS \
   --rpc-url http://localhost:8545 \
   --private-key 0x4bbbf85ce3377467afe5d46f804f221813b2bb87f24d81f60f1fcdbf7cbf4356
 
-echo "Successfully published a masked model from Client1"
+echo "Successfully published a masked model from Client3"
