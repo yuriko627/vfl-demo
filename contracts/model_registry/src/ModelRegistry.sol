@@ -40,12 +40,11 @@ contract ModelRegistry {
         registeredClients.push(msg.sender);
     }
 
-    function getModels() external view returns (MultiClassTrainedModel[] memory models) {
+    function getModels() external view returns (MultiClassTrainedModel[3] memory models) {
         // TODO: think whether we should wait for/expect all the clinets to register their models
         uint256 numRegisteredModels = registeredClients.length;
         require(numRegisteredModels == 3, "Not all the users registered models yet");
 
-        models = new MultiClassTrainedModel[](numRegisteredModels);
         for (uint256 i = 0; i < numRegisteredModels; i++) {
             models[i] = registeredModels[registeredClients[i]];
         }
