@@ -17,3 +17,5 @@ echo "✅ Fetched raw models:"
 echo $fetched_models
 
 fish ../parse_fetched_model.fish "$fetched_models" > Prover.toml
+
+nargo execute
