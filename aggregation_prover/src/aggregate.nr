@@ -66,7 +66,7 @@ pub fn aggregate<let M: u32, let C: u32, let L: u32>(
         }
     }
 
-    // Initialize an mpty model, which is to be returned as a final aggregated model
+    // Initialize an empty model, which is to be returned as a final aggregated model
     // We need to do division so we'll use QuantizedWithDiv Struct here
     let mut aggregated_model: FinalMultiClassTrainedModel<M, C> = FinalMultiClassTrainedModel {
         models: [
