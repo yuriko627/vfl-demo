@@ -43,7 +43,7 @@ end
 for i in (seq 1 3)  # 3 blocks total
 	echo "[[submitted_models]]"
     next_number
-    echo "n_samples = \"$current\""
+    echo "n_samples = { x = \"$current\" }"
     echo
 
     for j in (seq 1 3)  # 3 models per block

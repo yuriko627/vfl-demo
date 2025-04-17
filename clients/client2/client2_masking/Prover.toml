@@ -1,7 +1,7 @@
 priv_key = "2"
 
 [my_model]
-n_samples = "0x14"
+n_samples =  { x = "0x14" }
 
 [[my_model.models]]
 weights = [

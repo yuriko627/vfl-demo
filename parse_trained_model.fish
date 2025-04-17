@@ -23,11 +23,11 @@ if test $status -ne 0; echo "Error writing priv_key to $output_file"; exit 1; en
 echo "" >> $output_file
 
 # Extract n_samples
-set n_samples_line (string match -r 'n_samples:\s*0x[0-9a-f]+' -- $input_string)
-set n_samples (string replace -r 'n_samples:\s*' '' -- $n_samples_line)
+set n_samples_line (string match -r 'n_samples:\s*Quantized\s*{\s*x:\s*0x[0-9a-f]+' -- $input_string)
+set n_samples (string replace -r 'n_samples:\s*Quantized\s*{\s*x:\s*' '' -- $n_samples_line)
 
 echo "[my_model]" >> $output_file
-echo "n_samples = \"$n_samples\"" >> $output_file
+echo "n_samples =  { x = \"$n_samples\" }" >> $output_file
 echo "" >> $output_file
 
 # Extract the content within the models: [...] array
