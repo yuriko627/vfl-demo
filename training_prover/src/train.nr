@@ -12,7 +12,7 @@ pub struct TrainedModelPerClass<let M: u32> {
 // multiclass model
 pub struct MultiClassTrainedModel<let M: u32, let C: u32> {
     pub models: [TrainedModelPerClass<M>; C],
-    pub n_samples: Field,
+    pub n_samples: Quantized,
 }
 // N: Number of samples (e.g. Client1: 10, Client2: 10, Client3: 20)
 // M: Number of features per sample (e.g. 4)
@@ -30,7 +30,7 @@ pub fn train<let N: u32, let M: u32, let C: u32>(
         models: [
             TrainedModelPerClass { weights: [Quantized::zero(); M], bias: Quantized::zero() }; C
         ],
-        n_samples: Field::from(0),
+        n_samples: Quantized::zero(),
     };
 
     // Populate each class model
@@ -41,7 +41,7 @@ pub fn train<let N: u32, let M: u32, let C: u32>(
     }
 
     // Store the total number of samples for later aggregation
-    trained_multiclass_model.n_samples = Field::from(N);
+    trained_multiclass_model.n_samples = Quantized::new(Field::from(N));
 
     println(trained_multiclass_model);
 
