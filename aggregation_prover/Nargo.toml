@@ -6,4 +6,4 @@ authors = [""]
 [dependencies]
 training_prover = { path = "../training_prover" }
 noir_mpc_ml = { git = "https://github.com/hashcloak/noir-mpc-ml", tag = "v0.1.2" }
-noir_fixed_point = { path = "/Users/yurikonishijima/Development/noir-fixed-point" }
+noir_fixed_point = { git = "https://github.com/hashcloak/noir-fixed-point", tag = "main"}
