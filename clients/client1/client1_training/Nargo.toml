@@ -5,4 +5,4 @@ authors = [""]
 
 [dependencies]
 noir_mpc_ml = { git = "https://github.com/hashcloak/noir-mpc-ml", tag = "v0.1.2" }
-training_prover = { path = "../../../training_prover" }
+training_prover = { path = "../../../provers/training_prover" }

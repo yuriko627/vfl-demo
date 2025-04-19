@@ -4,5 +4,5 @@ type = "bin"
 authors = [""]
 
 [dependencies]
-training_prover = { path = "../training_prover" }
-aggregation_prover = { path = "../aggregation_prover" }
+training_prover = { path = "../provers/training_prover" }
+aggregation_prover = { path = "../provers/aggregation_prover" }
