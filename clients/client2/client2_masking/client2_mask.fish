@@ -44,7 +44,7 @@ echo $pk
 
 # Parse $pk and write to Prover.toml
 echo "🛠️ Parse public keys and save them in Prover.toml..."
-fish ../../../parse_fetched_pk.fish \
+bash ../../../parse_fetched_pk.sh \
   $pk \
   ./Prover.toml
 
