@@ -39,7 +39,7 @@ while [ ! -f /tmp/.train_done0 ] || [ ! -f /tmp/.train_done1 ] || [ ! -f /tmp/.t
   echo Waiting...
   sleep 1
 done
-fish ../deploy_pk_registry.fish | tee /tmp/deploy_pk_output.log; touch /tmp/.deploy_pk_done
+bash ../deploy_pk_registry.sh | tee /tmp/deploy_pk_output.log; touch /tmp/.deploy_pk_done
 "' C-m
 
 # In pane 4, start anvil nodes
@@ -87,7 +87,7 @@ while [ ! -f /tmp/.mask_done0 ] || [ ! -f /tmp/.mask_done1 ] || [ ! -f /tmp/.mas
   echo Waiting...
   sleep 1
 done
-fish ../deploy_model_registry.fish | tee /tmp/deploy_model_output.log; touch /tmp/.deploy_model_done
+bash ../deploy_model_registry.sh | tee /tmp/deploy_model_output.log; touch /tmp/.deploy_model_done
 "' C-m
 
 # Once model_registry contract deployment is done, restart client0-2, sending a transaction to register the masked model
