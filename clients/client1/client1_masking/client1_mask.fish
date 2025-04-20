@@ -44,7 +44,7 @@ echo $pk
 
 # Parse $pk and write to Prover.toml
 echo "🛠️ Parse public keys and save them in Prover.toml..."
-bash ../../../parse_fetched_pk.sh \
+bash ../../../scripts/parse_fetched_pk.sh \
   $pk \
   ./Prover.toml
 
@@ -59,7 +59,7 @@ echo $masking_output
 echo "Masking ZKcircuit executed: Masking done"
 
 # Parse the output masked model and pass it to publish_model.fish to publish it onchain
-bash ../../../parse_masked_model.sh "$masking_output" > /tmp/model1
+bash ../../../scripts/parse_masked_model.sh "$masking_output" > /tmp/model1
 
 bb prove -b ./target/client1_masking.json -w ./target/client1_masking.gz -o ./target/proof
 bb write_vk -b ./target/client1_masking.json -o ./target/vk
