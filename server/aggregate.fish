@@ -16,6 +16,6 @@ set fetched_models (cast call $MODELREGISTRY_ADDRESS \
 echo "✅ Fetched raw models:"
 echo $fetched_models
 
-fish ../parse_fetched_model.fish "$fetched_models" > Prover.toml
+bash ../parse_fetched_model.sh "$fetched_models" > Prover.toml
 
 nargo execute > finaloutput.toml
