@@ -49,11 +49,17 @@ fish ../../../parse_fetched_pk.fish \
   ./Prover.toml
 
 set masking_output (nargo execute 2>&1)
+
+if test $status -ne 0
+    echo "❌　nargo execute failed:"
+    echo $masking_output
+end
+
 echo $masking_output
 echo "Masking ZKcircuit executed: Masking done"
 
 # Parse the output masked model and pass it to publish_model.fish to publish it onchain
-fish ../../../parse_masked_model.fish "$masking_output" > /tmp/model2
+bash ../../../parse_masked_model.sh "$masking_output" > /tmp/model2
 
 bb prove -b ./target/client2_masking.json -w ./target/client2_masking.gz -o ./target/proof
 bb write_vk -b ./target/client2_masking.json -o ./target/vk
