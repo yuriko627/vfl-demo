@@ -1,6 +1,6 @@
 clients/*/*/target
 clients/*/masking/Prover.toml
-contracts/model_registry/src/*
+contracts/*/src/*Verifier.sol
 server/target
 server/Prover.toml
 server/finaloutput.toml
