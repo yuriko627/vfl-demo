@@ -101,7 +101,7 @@ while [ ! -f /tmp/.deploy_model_done ]; do
 done
 echo Contract deployed
 cd ../masking
-fish publish_model1.fish
+bash ../../../scripts/publish_model.sh 1
 touch /tmp/.publish_model_done0
 "' C-m
 
@@ -112,7 +112,7 @@ while [ ! -f /tmp/.deploy_model_done ]; do
 done
 echo Contract deployed
 cd ../masking
-fish publish_model2.fish
+bash ../../../scripts/publish_model.sh 2
 touch /tmp/.publish_model_done1
 "' C-m
 
@@ -123,7 +123,7 @@ while [ ! -f /tmp/.deploy_model_done ]; do
 done
 echo Contract deployed
 cd ../masking
-fish publish_model3.fish
+bash ../../../scripts/publish_model.sh 3
 touch /tmp/.publish_model_done2
 "' C-m
 
