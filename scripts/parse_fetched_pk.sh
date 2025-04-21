@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Usage: ./parse_pks_to_prover.sh "<256-char-hex-string>" /path/to/Prover.toml
+# Usage: /parse_fetched_pk.sh "<256-char-hex-string>" /path/to/Prover.toml
 
 set -e
 
@@ -65,7 +65,7 @@ EOF
 # --- Main Logic ---
 
 if [ "$#" -ne 2 ]; then
-    echo "Usage: ./parse_pks_to_prover.sh <256-char-hex> <path/to/Prover.toml>"
+    echo "Usage: ./parse_fetched_pk.sh <256-char-hex> <path/to/Prover.toml>"
     exit 1
 fi
 
