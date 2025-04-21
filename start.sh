@@ -53,7 +53,7 @@ while [ ! -f /tmp/.deploy_pk_done ]; do
   sleep 1
 done
 echo Contract deployed
-cd ../client1_masking
+cd ../masking
 fish client1_mask.fish
 touch /tmp/.mask_done0
 "' C-m
@@ -64,7 +64,7 @@ while [ ! -f /tmp/.deploy_pk_done ]; do
   sleep 1
 done
 echo Contract deployed
-cd ../client2_masking
+cd ../masking
 fish client2_mask.fish
 touch /tmp/.mask_done1
 "' C-m
@@ -75,7 +75,7 @@ while [ ! -f /tmp/.deploy_pk_done ]; do
   sleep 1
 done
 echo Contract deployed
-cd ../client3_masking
+cd ../masking
 fish client3_mask.fish
 touch /tmp/.mask_done2
 "' C-m
@@ -98,7 +98,7 @@ while [ ! -f /tmp/.deploy_model_done ]; do
   sleep 1
 done
 echo Contract deployed
-cd ../client1_masking
+cd ../masking
 fish publish_model1.fish
 touch /tmp/.publish_model_done0
 "' C-m
@@ -109,7 +109,7 @@ while [ ! -f /tmp/.deploy_model_done ]; do
   sleep 1
 done
 echo Contract deployed
-cd ../client2_masking
+cd ../masking
 fish publish_model2.fish
 touch /tmp/.publish_model_done1
 "' C-m
@@ -120,7 +120,7 @@ while [ ! -f /tmp/.deploy_model_done ]; do
   sleep 1
 done
 echo Contract deployed
-cd ../client3_masking
+cd ../masking
 fish publish_model3.fish
 touch /tmp/.publish_model_done2
 "' C-m

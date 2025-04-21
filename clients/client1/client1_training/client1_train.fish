@@ -12,10 +12,10 @@ echo $training_output | grep -oE 'pk_y: 0x[0-9a-fA-F]+' | grep -oE '0x[0-9a-fA-F
 
 set priv_key 1
 
-# Parse the output model and write to Prover.toml in ./client1_masking directory
+# Parse the output model and write to Prover.toml in ./masking directory
 bash ../../../scripts/parse_trained_model.sh \
   "$training_output" \
-  ../client1_masking/Prover.toml \
+  ../masking/Prover.toml \
   "$priv_key"
 
 bb prove -b ./target/client1_training.json -w ./target/client1_training.gz -o ./target/proof

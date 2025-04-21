@@ -1,38 +1,38 @@
 #!/usr/bin/env fish
 
 set PKREGISTRY_ADDRESS $(cat /tmp/pkregistry_address)
-set CL1TRAINVERIFIER_ADDRESS $(cat /tmp/client1trainverifier_address)
-set PROOF $(od -An -v -t x1 ../client1_training/target/proof | tr -d ' \n')
-set PK1_X $(cat /tmp/pk1_x)
-set PK1_Y $(cat /tmp/pk1_y)
+set CL2TRAINVERIFIER_ADDRESS $(cat /tmp/client2trainverifier_address)
+set PROOF $(od -An -v -t x1 ../client2_training/target/proof | tr -d ' \n')
+set PK2_X $(cat /tmp/pk2_x)
+set PK2_Y $(cat /tmp/pk2_y)
 
-echo "😶‍🌫️ Start masking a model on Client1"
+echo "😶‍🌫️ Start masking a model on Client2"
 
 # Send transaction to verify the proof of correct training,
 # and if this verification passes, register ECDH public key on chain
-# trasaction signature: registerPublicKey(proofForClient1, address(v1), pk1_x, pk1_y, dummyInputs);
+# trasaction signature: registerPublicKey(proofForClient2, address(v2), pk2_x, pk2_y, dummyInputs);
 echo "Verify training proof and register ECDH public key on chain"
 cast send $PKREGISTRY_ADDRESS \
   "registerPublicKey(bytes,address,bytes32,bytes32,bytes32[])" \
   0x$PROOF \
-  $CL1TRAINVERIFIER_ADDRESS \
-  $PK1_X \
-  $PK1_Y \
+  $CL2TRAINVERIFIER_ADDRESS \
+  $PK2_X \
+  $PK2_Y \
   [] \
   --rpc-url http://localhost:8545 \
-  --private-key 0x2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6
+  --private-key 0xdbda1821b80551c9d65939329250298aa3472ba22feea921c0cf5d620ea67b97
 
 # Just for the sake of demo, wait for the other two clients to register their public key
 # We have to think this asynchronous coordination issue later
 sleep 2
 
 # Fectch 2 neigbor clients' public keys
-echo "🔑 Fectch 2 neigbor clients' public keys (lower node: Client3, higher node: Client2)"
+echo "🔑 Fectch 2 neigbor clients' public keys (lower node: Client1, higher node: Client3)"
 
 set fetched_output (cast call $PKREGISTRY_ADDRESS \
   "getNeighborPublicKeys()" \
   --rpc-url http://localhost:8545 \
-  --from 0xa0Ee7A142d267C1f36714E4a8F75612F20a79720 2>&1)
+  --from 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f 2>&1)
 
 echo $fetched_output
 
@@ -59,20 +59,20 @@ echo $masking_output
 echo "Masking ZKcircuit executed: Masking done"
 
 # Parse the output masked model and pass it to publish_model.fish to publish it onchain
-bash ../../../scripts/parse_masked_model.sh "$masking_output" > /tmp/model1
+bash ../../../scripts/parse_masked_model.sh "$masking_output" > /tmp/model2
 
-bb prove -b ./target/client1_masking.json -w ./target/client1_masking.gz -o ./target/proof
-bb write_vk -b ./target/client1_masking.json -o ./target/vk
+bb prove -b ./target/masking.json -w ./target/masking.gz -o ./target/proof
+bb write_vk -b ./target/masking.json -o ./target/vk
 bb contract
 
 # Rename and copy verifier contract
 set src_path ./target/contract.sol
-set dest_path ../../../contracts/model_registry/src/Client1Verifier.sol
+set dest_path ../../../contracts/model_registry/src/Client2Verifier.sol
 
 cat $src_path | \
-    string replace -a --regex 'UltraVerifier\b' 'Client1Verifier' | \
-    string replace -a --regex 'BaseUltraVerifier\b' 'Client1BaseVerifier' | \
-    string replace -a --regex 'UltraVerificationKey\b' 'Client1VerificationKey' \
+    string replace -a --regex 'UltraVerifier\b' 'Client2Verifier' | \
+    string replace -a --regex 'BaseUltraVerifier\b' 'Client2BaseVerifier' | \
+    string replace -a --regex 'UltraVerificationKey\b' 'Client2VerificationKey' \
     > $dest_path
 
-echo "Client 1: masking done, verifier contract is ready to deploy"
+echo "Client 2: masking done, verifier contract is ready to deploy"
