@@ -1,5 +1,5 @@
 clients/*/*/target
-clients/*/*/Prover.toml
+clients/*/masking/Prover.toml
 contracts/model_registry/src/*
 server/target
 server/Prover.toml

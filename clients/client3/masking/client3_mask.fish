@@ -2,7 +2,7 @@
 
 set PKREGISTRY_ADDRESS $(cat /tmp/pkregistry_address)
 set CL3TRAINVERIFIER_ADDRESS $(cat /tmp/client3trainverifier_address)
-set PROOF $(od -An -v -t x1 ../client3_training/target/proof | tr -d ' \n')
+set PROOF $(od -An -v -t x1 ../training/target/proof | tr -d ' \n')
 set PK3_X $(cat /tmp/pk3_x)
 set PK3_Y $(cat /tmp/pk3_y)
 

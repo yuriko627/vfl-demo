@@ -18,8 +18,8 @@ bash ../../../scripts/parse_trained_model.sh \
   ../masking/Prover.toml \
   "$priv_key"
 
-bb prove -b ./target/client3_training.json -w ./target/client3_training.gz -o ./target/proof
-bb write_vk -b ./target/client3_training.json -o ./target/vk
+bb prove -b ./target/training.json -w ./target/training.gz -o ./target/proof
+bb write_vk -b ./target/training.json -o ./target/vk
 bb contract
 
 # Rename and copy verifier contract

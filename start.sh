@@ -28,9 +28,9 @@ tmux resize-pane -t 0 -y $EVENHEIGHT
 tmux resize-pane -t 1 -y $EVENHEIGHT
 
 # Run training script in each client and create `done` marker files
-tmux send-keys -t 0 'clear; cd ./client1_training; fish client1_train.fish; touch /tmp/.train_done0' C-m
-tmux send-keys -t 1 'clear; cd ./client2_training; fish client2_train.fish; touch /tmp/.train_done1' C-m
-tmux send-keys -t 2 'clear; cd ./client3_training; fish client3_train.fish; touch /tmp/.train_done2' C-m
+tmux send-keys -t 0 'clear; cd ./training; fish client1_train.fish; touch /tmp/.train_done0' C-m
+tmux send-keys -t 1 'clear; cd ./training; fish client2_train.fish; touch /tmp/.train_done1' C-m
+tmux send-keys -t 2 'clear; cd ./training; fish client3_train.fish; touch /tmp/.train_done2' C-m
 
 # In pane 3 (server), wait for all clients to complete the training, then deploy contract
 tmux send-keys -t 3 'clear; bash -c "
