@@ -2,11 +2,12 @@
 
 echo "Deploy 3 verifier contracts and ModelRegistry contract"
 cd ../contracts/model_registry/
+PRIVATE_KEY=$(bash ../../scripts/extract_eth_accounts.sh privatekey 4)
 
 # TODO: change hardcoded priv_key value from Anvil
 forge script script/DeployModelRegistry.s.sol \
     --rpc-url http://localhost:8545 --broadcast \
-    --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+    --private-key $PRIVATE_KEY
 
 # Extract contract addresses
 grep 'Client1Verifier' /tmp/deploy_model_output.log | grep -oE '0x[a-fA-F0-9]{40}' > /tmp/client1maskverifier_address

@@ -44,6 +44,8 @@ bash ../scripts/deploy_pk_registry.sh | tee /tmp/deploy_pk_output.log; touch /tm
 
 # In pane 4, start anvil nodes
 tmux send-keys -t 4 'clear; anvil' C-m
+sleep 1
+tmux capture-pane -pt 4 -S -1000 > /tmp/anvil_log # capture the log after it outputs available accounts and private keys
 
 # Once pk_registry contract deployment is done, restart client0-2, sending a transaction to register public key
 # contract address captured in pane 3
@@ -54,7 +56,7 @@ while [ ! -f /tmp/.deploy_pk_done ]; do
 done
 echo Contract deployed
 cd ../masking
-fish client1_mask.fish
+bash ../../../scripts/mask.sh 1
 touch /tmp/.mask_done0
 "' C-m
 
@@ -65,7 +67,7 @@ while [ ! -f /tmp/.deploy_pk_done ]; do
 done
 echo Contract deployed
 cd ../masking
-fish client2_mask.fish
+bash ../../../scripts/mask.sh 2
 touch /tmp/.mask_done1
 "' C-m
 
@@ -76,7 +78,7 @@ while [ ! -f /tmp/.deploy_pk_done ]; do
 done
 echo Contract deployed
 cd ../masking
-fish client3_mask.fish
+bash ../../../scripts/mask.sh 3
 touch /tmp/.mask_done2
 "' C-m
 
