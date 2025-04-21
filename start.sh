@@ -134,7 +134,7 @@ while [ ! -f /tmp/.publish_model_done0 ] || [ ! -f /tmp/.publish_model_done1 ] |
   echo Waiting...
   sleep 1
 done
-fish ./aggregate.fish
+bash ../scripts/aggregate.sh
 "' C-m
 
 # Attach to session
