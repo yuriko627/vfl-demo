@@ -41,7 +41,7 @@ def parse_and_adjust(file_path):
     return result
 
 def main():
-    files = ["../clients/client1/client1_masking/Prover.toml", "../clients/client2/client2_masking/Prover.toml", "../clients/client3/client3_masking/Prover.toml"]
+    files = ["../clients/client1/masking/Prover.toml", "../clients/client2/masking/Prover.toml", "../clients/client3/masking/Prover.toml"]
     all_models = []
     total_samples = 0
 
@@ -77,7 +77,6 @@ def main():
             "weights": weighted_averaged_weights,
             "bias": weighted_averaged_bias
         })
-        
 
         print(f"  Class {class_idx}:")
         print(f"    Weights: {weighted_averaged_weights}")
