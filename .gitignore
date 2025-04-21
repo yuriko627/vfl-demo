@@ -1,4 +1,7 @@
 # Ignore Nargo build outputs
 clients/*/*/target
 clients/*/*/Prover.toml
+contracts/model_registry/src/*
 server/target
+server/Prover.toml
+server/finaloutput.toml
