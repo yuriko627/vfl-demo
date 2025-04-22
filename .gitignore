@@ -3,4 +3,4 @@ clients/*/masking/Prover.toml
 contracts/*/src/*Verifier.sol
 server/target
 server/Prover.toml
-server/finaloutput.toml
+test/finaloutput.toml

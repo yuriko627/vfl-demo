@@ -18,4 +18,4 @@ echo "$FETCHED_MODELS"
 
 bash ../scripts/parse_fetched_model.sh "$FETCHED_MODELS" > Prover.toml
 
-nargo execute > finaloutput.toml
+nargo execute > ../test/finaloutput.toml
