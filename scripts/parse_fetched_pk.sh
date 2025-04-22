@@ -20,7 +20,7 @@ write_pubkeys_into_toml() {
     local pk_higher_x="0x${raw_pk_hex:128:64}"
     local pk_higher_y="0x${raw_pk_hex:192:64}"
 
-    echo "✅ Parsed Keys:"
+    echo "✅ Fetched public keys:"
     echo "pk_lower.x = $pk_lower_x"
     echo "pk_lower.y = $pk_lower_y"
     echo "pk_higher.x = $pk_higher_x"
@@ -59,7 +59,7 @@ EOF
     # Append new block
     echo "$pk_block" >> "$tmpfile"
     mv "$tmpfile" "$toml_path"
-    echo "✅ Parsed public keys written to $toml_path"
+    echo "Parsed public keys written to $toml_path"
 }
 
 # --- Main Logic ---

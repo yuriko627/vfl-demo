@@ -13,7 +13,7 @@ FETCHED_MODELS=$(cast call "$MODELREGISTRY_ADDRESS" \
   --rpc-url http://localhost:8545 \
   --from $CALLER_ADDRESS 2>&1)
 
-echo "✅ Fetched raw models:"
+echo "Fetched raw models:"
 echo "$FETCHED_MODELS"
 
 bash ../scripts/parse_fetched_model.sh "$FETCHED_MODELS" > Prover.toml
