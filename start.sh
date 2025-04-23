@@ -3,7 +3,7 @@
 SESSION="vfl_cli_demo"
 
 # Clean up any previous marker files
-rm -f /tmp/.deploy_contracts_done /tmp/.publish_model_done1 /tmp/.publish_model_done2 /tmp/.publish_model_done3
+rm -f /tmp/.deploy_contracts_done /tmp/.publish_model_done1 /tmp/.publish_model_done2 /tmp/.publish_model_done3 /tmp/.aggregate_done
 
 tmux new-session -d -s $SESSION -c clients/client1
 
@@ -71,14 +71,39 @@ bash ../../scripts/publish_model.sh 3; touch /tmp/.publish_model_done3
 "' C-m
 
 
-# In pane 3 (server), wait for all clients to publish the masked models, then fetch them
+# In pane 3 (server), wait for all clients to publish the masked models, then fetch all of them and aggregate
 tmux send-keys -t 3 'clear; bash -c "
 echo Waiting for the clients to complete a local training and submit masked models
 while [ ! -f /tmp/.publish_model_done1 ] || [ ! -f /tmp/.publish_model_done2 ] || [ ! -f /tmp/.publish_model_done3 ]; do
   echo Waiting...
   sleep 1
 done
-bash ../scripts/aggregate.sh
+bash ../scripts/aggregate.sh; touch /tmp/.aggregate_done
+"' C-m
+
+# Once aggregation is done on the server side, fetch the global model on the client1-3
+tmux send-keys -t 0 'bash -c "
+while [ ! -f /tmp/.aggregate_done ]; do
+  echo [client1] Waiting for the server to aggregate local models...
+  sleep 1
+done
+bash ../../scripts/fetch_global_model.sh 1
+"' C-m
+
+tmux send-keys -t 1 'bash -c "
+while [ ! -f /tmp/.aggregate_done ]; do
+  echo [client2] Waiting for the server to aggregate local models...
+  sleep 1
+done
+bash ../../scripts/fetch_global_model.sh 2
+"' C-m
+
+tmux send-keys -t 2 'bash -c "
+while [ ! -f /tmp/.aggregate_done ]; do
+  echo [client3] Waiting for the server to aggregate local models...
+  sleep 3
+done
+bash ../../scripts/fetch_global_model.sh 3
 "' C-m
 
 # Attach to session

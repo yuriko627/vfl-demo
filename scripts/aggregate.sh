@@ -13,9 +13,6 @@ FETCHED_MODELS=$(cast call "$MODELREGISTRY_ADDRESS" \
   --rpc-url http://localhost:8545 \
   --from $CALLER_ADDRESS 2>&1)
 
-echo "Fetched raw models:"
-echo "$FETCHED_MODELS"
-
 bash ../scripts/parse_fetched_model.sh "$FETCHED_MODELS" > Prover.toml
 
 echo "💻 Running aggregation ZK circuit..."
@@ -52,10 +49,10 @@ echo "${MODEL}"
 #	 address verifierAddress,
 #	 MultiClassTrainedModel calldata model,
 #	 bytes32[] calldata publicInputs)
-echo "📝 Send transaction to publish masked models"
+echo "📝 Send transaction to publish a global model"
 echo "🧾 Transaction Receipt:"
 cast send "${MODELREGISTRY_ADDRESS}" \
-  "registerLocalModel(bytes,address,((uint256[4],uint256)[3],uint256),bytes32[])" \
+  "registerGlobalModel(bytes,address,((uint256[4],uint256)[3],uint256),bytes32[])" \
   0x${PROOF} \
   "${VERIFIER_ADDRESS}" \
   "${MODEL}" \
