@@ -28,6 +28,23 @@ done
 # Wait for all background tasks to complete
 wait
 
+echo "📑 Generating aggregation verifier contract for the Server..."
+cd ../server
+bb write_vk -b "./target/aggregation.json" -o ./target/vk
+bb contract
+
+# Rename some variables in the auto-generated verifier contract
+src_path=./target/contract.sol
+dest_path=../contracts/model_registry/src/ServerVerifier.sol
+
+cat "$src_path" | \
+sed -e "s/UltraVerifier/ServerVerifier/g" | \
+sed -e "s/BaseUltraVerifier/ServerBaseVerifier/g" | \
+sed -e "s/UltraVerificationKey/ServrVerificationKey/g" \
+> "$dest_path"
+
+echo "✅ Server aggregation verifier contract is ready to deploy"
+
 cd ../contracts/model_registry/
 PRIVATE_KEY=$(bash ../../scripts/extract_eth_accounts.sh privatekey 4)
 
@@ -40,6 +57,7 @@ forge script script/DeployModelRegistry.s.sol \
 grep 'Client1Verifier' /tmp/deploy_model_output.log | grep -oE '0x[a-fA-F0-9]{40}' > /tmp/client1maskverifier_address
 grep 'Client2Verifier' /tmp/deploy_model_output.log | grep -oE '0x[a-fA-F0-9]{40}' > /tmp/client2maskverifier_address
 grep 'Client3Verifier' /tmp/deploy_model_output.log | grep -oE '0x[a-fA-F0-9]{40}' > /tmp/client3maskverifier_address
-grep 'ModelRegistry'   /tmp/deploy_model_output.log | grep -oE '0x[a-fA-F0-9]{40}' > /tmp/modelregistry_address
+grep 'ServerVerifier' /tmp/deploy_model_output.log | grep -oE '0x[a-fA-F0-9]{40}' > /tmp/serververifier_address
+grep 'ModelRegistry'  /tmp/deploy_model_output.log | grep -oE '0x[a-fA-F0-9]{40}' > /tmp/modelregistry_address
 
-echo "✅ 3 masking verifier contracts and ModelRegistry contract has been deployed"
+echo "✅ 4 masking verifier contracts and ModelRegistry contract has been deployed"

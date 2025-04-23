@@ -18,7 +18,7 @@ echo "${MODEL}"
 # Send transaction to verify the proof of correct masking,
 # and if this verification passes, publish the masked model
 # transaction signature:
-# registerModel(
+# registerLocalModel(
 #	 bytes calldata proof,
 #	 address verifierAddress,
 #	 MultiClassTrainedModel calldata model,
@@ -26,7 +26,7 @@ echo "${MODEL}"
 echo "📝 Send transaction to publish masked models"
 echo "🧾 Transaction Receipt:"
 cast send "${MODELREGISTRY_ADDRESS}" \
-  "registerModel(bytes,address,((uint256[4],uint256)[3],uint256),bytes32[])" \
+  "registerLocalModel(bytes,address,((uint256[4],uint256)[3],uint256),bytes32[])" \
   0x${PROOF} \
   "${VERIFIER_ADDRESS}" \
   "${MODEL}" \

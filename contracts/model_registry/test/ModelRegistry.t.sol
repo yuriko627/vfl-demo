@@ -63,13 +63,13 @@ contract ModelRegistryTest is Test {
 
         // === Register models ===
         vm.prank(client1);
-        registry.registerModel(proofForClient1, address(v1), model1, dummyInputs);
+        registry.registerLocalModel(proofForClient1, address(v1), model1, dummyInputs);
 
         vm.prank(client2);
-        registry.registerModel(proofForClient2, address(v2), model2, dummyInputs);
+        registry.registerLocalModel(proofForClient2, address(v2), model2, dummyInputs);
 
         vm.prank(client3);
-        registry.registerModel(proofForClient3, address(v3), model3, dummyInputs);
+        registry.registerLocalModel(proofForClient3, address(v3), model3, dummyInputs);
 
         // === Check that all models are registered ===
         ModelRegistry.MultiClassTrainedModel[] memory fetchedModels = registry.getModels();
