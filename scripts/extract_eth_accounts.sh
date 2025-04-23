@@ -19,7 +19,7 @@ if ! [[ "$index" =~ ^[0-9]+$ ]]; then
   exit 1
 fi
 
-log_file="/tmp/anvil_log"
+log_file="/tmp/anvil.log"
 
 # Flatten the log to fix wrapping issues
 flattened_log=$(tr -d '\n' < "$log_file")

@@ -39,6 +39,25 @@ bash ../../../scripts/parse_trained_model.sh \
   ../masking/Prover.toml \
   "$priv_key"
 
+PKREGISTRY_ADDRESS=$(cat /tmp/pkregistry_address)
+TRAIN_VERIFIER_ADDRESS=$(cat /tmp/client${client_id}trainverifier_address)
+PROOF=$(od -An -v -t x1 ./target/proof | tr -d ' \n')
+PK_X=$(cat /tmp/pk${client_id}_x)
+PK_Y=$(cat /tmp/pk${client_id}_y)
+PRIVATE_KEY=$(bash ../../../scripts/extract_eth_accounts.sh privatekey ${client_id})
+
+echo "📝 Send transaction to verify training proof and register ECDH public key on chain"
+echo "🧾 Transaction Receipt:"
+cast send "$PKREGISTRY_ADDRESS" \
+  "registerPublicKey(bytes,address,bytes32,bytes32,bytes32[])" \
+  0x"$PROOF" \
+  "$TRAIN_VERIFIER_ADDRESS" \
+  "$PK_X" \
+  "$PK_Y" \
+  [] \
+  --rpc-url http://localhost:8545 \
+  --private-key "$PRIVATE_KEY"
+
 
 
 

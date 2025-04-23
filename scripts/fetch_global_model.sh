@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 
 set -e
 
@@ -31,5 +32,5 @@ else
   echo "❌ Failed to fetch a global model at Client${client_id}"
 fi
 
-echo "Fetched raw models:"
+echo "Fetched global models:"
 echo $FETCHED_GLOBAL_MODEL

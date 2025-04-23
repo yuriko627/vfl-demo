@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+set -e
+
+trap 'echo "❌ Error on line $LINENO. Exiting."; exit 1' ERR
+
 MODELREGISTRY_ADDRESS=$(cat /tmp/modelregistry_address)
 CALLER_ADDRESS=$(bash ../scripts/extract_eth_accounts.sh address 5)
 
@@ -12,6 +16,8 @@ FETCHED_MODELS=$(cast call "$MODELREGISTRY_ADDRESS" \
   "getModels()(((uint256[4],uint256)[3], uint256)[3])" \
   --rpc-url http://localhost:8545 \
   --from $CALLER_ADDRESS 2>&1)
+
+echo $FETCHED_MODELS
 
 bash ../scripts/parse_fetched_model.sh "$FETCHED_MODELS" > Prover.toml
 

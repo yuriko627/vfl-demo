@@ -8,6 +8,7 @@ for client_id in 1 2 3; do
     # Generate verification key and solidity verifier contract
     echo "📑 Generating training verifier contract for Client ${client_id}..."
     cd ../clients/client${client_id}/training
+    nargo compile
     bb write_vk -b "./target/client${client_id}_training.json" -o ./target/vk
     bb contract
 
