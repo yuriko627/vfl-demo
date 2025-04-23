@@ -36,7 +36,7 @@ bash ../scripts/deploy_model_registry.sh | tee /tmp/deploy_model_output.log; tou
 
 # In pane 4, start anvil nodes
 tmux send-keys -t 4 'clear; anvil' C-m
-sleep 2
+sleep 3
 tmux capture-pane -pt 4 -S -1000 > /tmp/anvil_log # capture the log after it outputs available accounts and private keys
 
 # Once contract deployment is done, start training + masking model on the client1-3
