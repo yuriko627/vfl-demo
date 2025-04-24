@@ -31,7 +31,7 @@ wait
 echo "📑 Generating aggregation verifier contract for the Server..."
 cd ../server
 nargo compile
-bb write_vk -b "./target/aggregation.json" -o ./target/vk
+bb write_vk -b "./target/server.json" -o ./target/vk
 bb contract
 
 # Rename some variables in the auto-generated verifier contract

@@ -1,5 +1,5 @@
 [package]
-name = "aggregation"
+name = "server"
 type = "bin"
 authors = [""]
 

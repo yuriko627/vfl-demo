@@ -36,7 +36,7 @@ bash ../scripts/parse_masked_model.sh "$aggregation_output" > /tmp/global_model
 
 # Generate proof
 echo "👾 Generate a proof for correct aggregation..."
-bb prove -b target/aggregation.json -w target/aggregation.gz -o target/proof
+bb prove -b target/server.json -w target/server.gz -o target/proof
 
 MODELREGISTRY_ADDRESS=$(cat /tmp/modelregistry_address)
 VERIFIER_ADDRESS=$(cat /tmp/serververifier_address)
