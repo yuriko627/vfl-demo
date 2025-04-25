@@ -33,7 +33,7 @@ echo "n_samples =  { x = \"$n_samples\" }" >> "$output_file"
 echo "" >> "$output_file"
 
 # Extract models array content
-models_content=$(echo "$input_string" | grep -oE 'models:\s*\[(.*?)\],\s*n_samples:')
+models_content=$(echo "$input_string" | grep -oE 'models:\s*\[(.*)\]')
 
 if [ $? -ne 0 ] || [ -z "$models_content" ]; then
     echo "Error: Could not extract 'models: [...]' content from input string." >&2
@@ -45,7 +45,7 @@ fi
 model_blocks=()
 while read -r block; do
     model_blocks+=("$block")
-done < <(echo "$models_content" | grep -oE 'TrainedModelPerClass\s*\{.*?\}\s*\}' | tr '\n' '\0' | xargs -0 -n1)
+done < <(echo "$models_content" | perl -n0E 'say for /TrainedModelPerClass\s*\{.*?\}\s*\}/sg' | tr '\n' '\0' | xargs -0 -n1)
 
 if [ ${#model_blocks[@]} -eq 0 ]; then
     echo "Error: Could not find any 'TrainedModelPerClass { ... }' blocks." >&2
