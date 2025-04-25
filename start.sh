@@ -33,21 +33,10 @@ EVENHEIGHT=$((TOTAL / 3))
 tmux resize-pane -t 0 -y $EVENHEIGHT
 tmux resize-pane -t 1 -y $EVENHEIGHT
 
-# In pane 3 (server), deploy PublicKeyRegistry and ModelRegistry contracts first
-tmux send-keys -t 3 'clear; bash -c "
-echo [Server]: Deploy necessary contracts first
-bash ../scripts/deploy_pk_registry.sh | tee /tmp/deploy_pk_output.log;
-bash ../scripts/deploy_model_registry.sh | tee /tmp/deploy_model_output.log; touch /tmp/.deploy_contracts_done;
-"' C-m
-
-# In pane 4, start anvil nodes
-tmux send-keys -t 4 'clear; anvil' C-m
-sleep 4
-tmux capture-pane -pt 4 -S -1000 > /tmp/anvil.log # capture the log after it outputs available accounts and private keys
-
 # Once contract deployment is done, start training + masking model on the client1-3
 # Once the aggregation is done on the server side, fetch the global model
 tmux send-keys -t 0 'clear; bash -c "
+set -e
 while [ ! -f /tmp/.deploy_contracts_done ]; do
   echo [client1] Waiting for all the contracts to be deployed...
   sleep 1
@@ -78,6 +67,7 @@ echo [client1] Total time from training to fetching global model: \$elapsed seco
 
 
 tmux send-keys -t 1 'clear; bash -c "
+set -e
 while [ ! -f /tmp/.deploy_contracts_done ]; do
   echo [client2] Waiting for all the contracts to be deployed...
   sleep 1
@@ -107,6 +97,7 @@ echo [client2] Total time from training to fetching global model: \$elapsed seco
 "' C-m
 
 tmux send-keys -t 2 'clear; bash -c "
+set -e
 while [ ! -f /tmp/.deploy_contracts_done ]; do
   echo [client3] Waiting for all the contracts to be deployed...
   sleep 1
@@ -135,8 +126,16 @@ elapsed=\$((end - start))
 echo [client3] Total time from training to fetching global model: \$elapsed seconds
 "' C-m
 
-# In pane 3 (server), wait for all clients to publish the masked models, then fetch all of them and aggregate
+# In pane 3 (server)
+# 1. Deploy PublicKeyRegistry and ModelRegistry contracts first
+# 2. Wait for all clients to publish the masked models
+# 3. Fetch all of them and aggregate
 tmux send-keys -t 3 'clear; bash -c "
+
+echo [Server]: Deploy necessary contracts first
+bash ../scripts/deploy_pk_registry.sh | tee /tmp/deploy_pk_output.log;
+bash ../scripts/deploy_model_registry.sh | tee /tmp/deploy_model_output.log; touch /tmp/.deploy_contracts_done;
+
 echo Waiting for the clients to complete a local training and submit masked models
 while [ ! -f /tmp/.publish_model_done1 ] || [ ! -f /tmp/.publish_model_done2 ] || [ ! -f /tmp/.publish_model_done3 ]; do
   echo Waiting...
@@ -144,6 +143,17 @@ while [ ! -f /tmp/.publish_model_done1 ] || [ ! -f /tmp/.publish_model_done2 ] |
 done
 bash ../scripts/aggregate.sh; touch /tmp/.aggregate_done
 "' C-m
+
+# In pane 4, start Anvil node
+tmux send-keys -t 4 'clear; anvil' C-m
+
+# wait until the log is shown
+while ! tmux capture-pane -pt 4 -S -1000 | grep -q "Available Accounts"; do
+  sleep 0.5
+done
+
+# capture the full log from pane 4
+tmux capture-pane -pt 4 -S -1000 > /tmp/anvil.log
 
 # Attach to session
 tmux attach -t $SESSION
