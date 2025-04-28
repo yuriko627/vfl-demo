@@ -45,7 +45,7 @@ pub fn aggregate<let M: u32, let C: u32, let L: u32>(
         //                          |class0                     | |class1                     | |class2                     |
         // model 0 (from client 0): [w000, w001, w002, w003, b00] [w010, w011, w012, w013, b01] [w020, w021, w022, w023, b02]
         // model 1 (from client 1): [w100, w101, w102, w103, b10] [w110, w111, w112, w113, b11] [w120, w121, w122, w123, b12]
-        // model 1 (from client 1): [w200, w201, w202, w203, b20] [w210, w211, w212, w213, b21] [w220, w221, w222, w223, b22]
+        // model 2 (from client 2): [w200, w201, w202, w203, b20] [w210, w211, w212, w213, b21] [w220, w221, w222, w223, b22]
         // aggregated model       : [w000+w100+w200, w001+w101+w201,...,b00+b10+b20]...
         for class_idx in 0..C {
             let current = model.models[class_idx];
