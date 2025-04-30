@@ -2,6 +2,8 @@
 
 This CLI demo shows how *publically verifiable, private & collaborative AI training* in a decentralized network can be done, combining federated learning, zero-knowledge proof, and blockchain.
 
+For more details, please go check my blog post: https://yuriko.io/posts/verifiable-federated-learning/
+
 ## Prerequisites
 
 You need to install
